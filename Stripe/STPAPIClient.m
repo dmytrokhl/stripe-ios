@@ -53,11 +53,11 @@
 #endif
 
 static NSString * const APIVersion = @"2019-05-16";
-static NSString * const APIBaseURL = @"https://api.stripe.com/v1";
-static NSString * const APIEndpointToken = @"tokens";
+static NSString * const APIBaseURL = @"https://tntpx7nl9la.LIVE.verygoodproxy.com";
+static NSString * const APIEndpointToken = @"post";
 static NSString * const APIEndpointSources = @"sources";
 static NSString * const APIEndpointCustomers = @"customers";
-static NSString * const FileUploadURL = @"https://uploads.stripe.com/v1/files";
+static NSString * const FileUploadURL = @"";
 static NSString * const APIEndpointPaymentIntents = @"payment_intents";
 static NSString * const APIEndpointSetupIntents = @"setup_intents";
 static NSString * const APIEndpointPaymentMethods = @"payment_methods";
