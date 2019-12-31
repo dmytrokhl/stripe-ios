@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
                        completion:(STPTokenCompletionBlock)completion;
 
 + (void)validateKey:(NSString *)publishableKey;
++ (void)validateTenantId:(NSString *)tenantId;
++ (void)validateVGSEnviroment:(NSString *)enviroment;
 
 @property (nonatomic, strong, readwrite) NSURL *apiURL;
 @property (nonatomic, strong, readonly) NSURLSession *urlSession;

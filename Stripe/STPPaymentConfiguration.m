@@ -68,6 +68,17 @@
     return _availableCountries;
 }
 
+- (NSString *)enviromentString {
+    switch (self.enviroment) {
+        case VGSOrganizationEnviromentSandbox:
+            return @"sandbox";
+        case VGSOrganizationEnviromentLive:
+            return @"live";
+        default:
+            return @"";
+    }
+}
+
 #pragma mark - Description
 
 - (NSString *)description {
@@ -150,6 +161,8 @@
 - (id)copyWithZone:(__unused NSZone *)zone {
     STPPaymentConfiguration *copy = [self.class new];
     copy.publishableKey = self.publishableKey;
+    copy.tenantId = self.tenantId;
+    copy.enviroment = self.enviroment;
     copy.additionalPaymentOptions = self.additionalPaymentOptions;
     copy.requiredBillingAddressFields = self.requiredBillingAddressFields;
     copy.requiredShippingAddressFields = self.requiredShippingAddressFields;

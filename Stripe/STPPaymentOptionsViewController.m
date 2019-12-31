@@ -263,7 +263,7 @@
     if (self) {
         _configuration = configuration;
         _shippingAddress = shippingAddress;
-        _apiClient = [[STPAPIClient alloc] initWithPublishableKey:configuration.publishableKey];
+        _apiClient = [[STPAPIClient alloc] initWithPublishableKey:configuration.publishableKey tenantId:configuration.tenantId enviroment:configuration.enviroment];
         _apiAdapter = apiAdapter;
         _loadingPromise = loadingPromise;
         _delegate = delegate;

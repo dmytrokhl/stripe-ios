@@ -13,6 +13,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** VGS Organization Environment enumeration
+    - sandbox: set for debug mode
+    - live: set for prodaction mode
+ */
+typedef NS_ENUM(NSInteger, VGSOrganizationEnviroment) {
+    VGSOrganizationEnviromentSandbox,
+    VGSOrganizationEnviromentLive
+};
+
 /**
  An `STPPaymentConfiguration` represents all the options you can set or change
  around a payment. 
@@ -36,6 +45,25 @@ NS_ASSUME_NONNULL_BEGIN
  @see https://dashboard.stripe.com/account/apikeys
  */
 @property (nonatomic, copy, readwrite) NSString *publishableKey;
+
+/**
+ Your VGS Organization tenant id
+ 
+ @see http://dashboard.verygoodsecurity.com
+ */
+@property (nonatomic, copy, readwrite) NSString *tenantId;
+
+/**
+ Your VGS Organization enviroment
+ 
+ @see http://dashboard.verygoodsecurity.com
+ */
+@property (nonatomic, readwrite) VGSOrganizationEnviroment enviroment;
+
+/**
+ Your VGS Organization enviroment - String Representation
+ */
+@property (nonatomic, readonly) NSString *enviromentString;
 
 /**
  An enum value representing which payment options you will accept from your user

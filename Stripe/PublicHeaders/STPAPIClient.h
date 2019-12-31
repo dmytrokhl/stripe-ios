@@ -12,6 +12,7 @@
 #import "FauxPasAnnotations.h"
 #import "STPBlocks.h"
 #import "STPFile.h"
+#import "STPPaymentConfiguration.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,9 +35,11 @@ static NSString *const STPSDKVersion = @"18.2.0";
  possible in your application's lifecycle, preferably in your AppDelegate.
 
  @param   publishableKey Your publishable key, obtained from https://stripe.com/account/apikeys
+ @param tenantId VGS tenantId key to use, from https://dashboard.verygoodsecurity.com
+ @param enviroment VGSOrganizationEnviroment key to use, from https://dashboard.verygoodsecurity.com
  @warning Make sure not to ship your test API keys to the App Store! This will log a warning if you use your test key in a release build.
  */
-+ (void)setDefaultPublishableKey:(NSString *)publishableKey;
++ (void)setDefaultPublishableKey:(NSString *)publishableKey tenantId:(NSString *)tenantId enviroment:(VGSOrganizationEnviroment )enviroment;
 
 /**
  The current default publishable key.
@@ -69,9 +72,11 @@ static NSString *const STPSDKVersion = @"18.2.0";
  Initializes an API client with the given publishable key.
 
  @param publishableKey The publishable key to use.
+ @param tenantId VGS tenantId key to use.
+ @param enviroment VGSOrganizationEnviroment key to use.
  @return An instance of STPAPIClient.
  */
-- (instancetype)initWithPublishableKey:(NSString *)publishableKey;
+- (instancetype)initWithPublishableKey:(NSString *)publishableKey tenantId:(NSString *)tenantId enviroment:(VGSOrganizationEnviroment )enviroment;
 
 /**
  The client's publishable key.

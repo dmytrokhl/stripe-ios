@@ -53,7 +53,7 @@
 #endif
 
 static NSString * const APIVersion = @"2019-05-16";
-static NSString * const APIBaseURL = @"https://tntpx7nl9la.LIVE.verygoodproxy.com";
+static NSString * const APIBaseURL = @"verygoodproxy.com";
 static NSString * const APIEndpointToken = @"tokens";
 static NSString * const APIEndpointSources = @"sources";
 static NSString * const APIEndpointCustomers = @"customers";
@@ -70,9 +70,13 @@ static NSString * const APIEndpointFPXStatus = @"fpx/bank_statuses";
 
 static NSArray<PKPaymentNetwork> *_additionalEnabledApplePayNetworks;
 
-+ (void)setDefaultPublishableKey:(NSString *)publishableKey {
++ (void)setDefaultPublishableKey:(NSString *)publishableKey tenantId:(NSString *)tenantId enviroment:(VGSOrganizationEnviroment )enviroment {
     [STPAPIClient validateKey:publishableKey];
+    [STPAPIClient validateTenantId:tenantId];
     [STPPaymentConfiguration sharedConfiguration].publishableKey = publishableKey;
+    [STPPaymentConfiguration sharedConfiguration].tenantId = tenantId;
+    [STPPaymentConfiguration sharedConfiguration].enviroment = enviroment;
+    [STPAPIClient validateVGSEnviroment:[STPPaymentConfiguration sharedConfiguration].enviromentString];
 }
 
 + (NSString *)defaultPublishableKey {
@@ -118,21 +122,29 @@ static NSArray<PKPaymentNetwork> *_additionalEnabledApplePayNetworks;
     return [self initWithConfiguration:[STPPaymentConfiguration sharedConfiguration]];
 }
 
-- (instancetype)initWithPublishableKey:(NSString *)publishableKey {
+- (instancetype)initWithPublishableKey:(NSString *)publishableKey tenantId:(NSString *)tenantId enviroment:(VGSOrganizationEnviroment )enviroment {
     STPPaymentConfiguration *config = [[STPPaymentConfiguration alloc] init];
     config.publishableKey = [publishableKey copy];
+    config.tenantId = [tenantId copy];
+    config.enviroment = enviroment;
+    
     return [self initWithConfiguration:config];
 }
 
 - (instancetype)initWithConfiguration:(STPPaymentConfiguration *)configuration {
     NSString *publishableKey = [configuration.publishableKey copy];
+    NSString *tenantId = [configuration.tenantId copy];
+    NSString *enviroment = [configuration.enviromentString copy];
     if (publishableKey) {
         [self.class validateKey:publishableKey];
     }
+    [self.class validateTenantId:tenantId];
+    [self.class validateVGSEnviroment:enviroment];
     self = [super init];
     if (self) {
         _apiKey = publishableKey;
-        _apiURL = [NSURL URLWithString:APIBaseURL];
+        NSString *apiString = [NSString stringWithFormat:@"%@.%@.%@", configuration.tenantId, configuration.enviromentString, APIBaseURL];
+        _apiURL = [NSURL URLWithString:apiString];
         _configuration = configuration;
         _stripeAccount = configuration.stripeAccount;
         _sourcePollers = [NSMutableDictionary dictionary];
@@ -214,6 +226,20 @@ static NSArray<PKPaymentNetwork> *_additionalEnabledApplePayNetworks;
     }
 #endif
 }
+
++ (void)validateTenantId:(NSString *)tenantId {
+    NSCAssert(tenantId != nil && ![tenantId isEqualToString:@""],
+              @"You must use a valid tenantId. For more info, see https://dashboard.verygoodsecurity.com");
+    BOOL isAlphaNumeric = [tenantId rangeOfString:@"^[a-zA-Z0-9]+$" options:NSRegularExpressionSearch].location != NSNotFound;
+    NSCAssert(!isAlphaNumeric,
+              @"You must use a valid tenantId. For more info, see https://dashboard.verygoodsecurity.com");
+}
+
++ (void)validateVGSEnviroment:(NSString *)enviroment {
+    NSCAssert(![enviroment isEqualToString:@"sanbox"] || ![enviroment isEqualToString:@"live"],
+              @"You must setup VGSOrganizationEnviroment key. For more info, see https://dashboard.verygoodsecurity.com");
+}
+
 #pragma clang diagnostic pop
 
 + (NSString *)stripeUserAgentDetailsWithAppInfo:(nullable STPAppInfo *)appInfo {
